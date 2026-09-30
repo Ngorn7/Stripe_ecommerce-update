@@ -1,6 +1,6 @@
 import api from "@/api/https";
 import { defineStore } from "pinia";
-import { ref } from "vue";
+import { ref, computed } from "vue";
 import { useToast } from "vue-toastification";
 export const useCartStore = defineStore("cart", () => {
   const toast = useToast();
@@ -9,16 +9,22 @@ export const useCartStore = defineStore("cart", () => {
   let loadingDelete = ref(false);
   let myCart = ref([]);
   let countQty = ref(1);
-  let countProduct = ref(0);
-  let total = ref(0);
+
+  const countProduct = computed(() => myCart.value.length);
+  const total = computed(() => {
+    return myCart.value.reduce((sum, item) => {
+      const price = Number(item.product?.price) || 0;
+      const qty = Number(item.qty) || 0;
+      return sum + (price * qty);
+    }, 0);
+  });
+
   async function fetchMyCart() {
     loadingCart.value = true;
     try {
       const res = await api.get("/api/profile/carts");
       // console.log(res);
-      myCart.value = res.data.data.items;
-      total.value = res.data.data.total;
-      countProduct.value = myCart.value.length;
+      myCart.value = res.data.data.items || res.data.data || [];
     } catch (err) {
       console.log(err);
     } finally {

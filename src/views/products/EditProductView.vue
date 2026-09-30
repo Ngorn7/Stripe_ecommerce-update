@@ -280,7 +280,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, computed, reactive, watch } from "vue";
+import { ref, onMounted, computed, reactive, watch, toRaw } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { useCategoryStore } from "@/stores/category";
 import { useProductStore } from "@/stores/product";
@@ -375,7 +375,7 @@ async function submitForm() {
   formData.append("description", form.value.description || "");
   if (form.value.category_ids)
     formData.append("category_ids", JSON.stringify([form.value.category_ids]));
-  if (image.value instanceof File) formData.append("image", image.value);
+  if (image.value instanceof File) formData.append("image", toRaw(image.value));
   else if (isDefaultImage.value) formData.append("image", "");
 
   try {

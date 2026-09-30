@@ -247,7 +247,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch, reactive, nextTick } from "vue";
+import { ref, onMounted, watch, reactive, nextTick, toRaw } from "vue";
 import { useRouter } from "vue-router";
 import Select from "primevue/select";
 import BaseInput from "@/components/BaseInput.vue";
@@ -334,7 +334,7 @@ async function submitForm() {
   formData.append("story", form.value.story);
   formData.append("detail", form.value.detail);
   formData.append("description", form.value.description);
-  if (form.value.image) formData.append("image", form.value.image);
+  if (form.value.image) formData.append("image", toRaw(form.value.image));
 
   try {
     await api.post("/api/products", formData);

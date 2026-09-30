@@ -21,50 +21,26 @@
           <div class="col-lg-6">
             <div class="d-flex pb-3">
               <div class="border-0 me-4 mt-3">
-                <div
-                  class="position-relative mx-auto"
-                  style="width: 150px; height: 150px"
-                >
-                  <img
-                    id="avatar"
-                    :src="MyProfileStore.myProfile?.avatar"
-                    class="rounded-circle border w-100 h-100 object-fit-cover"
-                    alt="profile"
-                  />
-                  <div
-                    class="dropdown position-absolute bg-main rounded-circle"
-                    style="bottom: 50px; right: -12px"
-                  >
+                <div class="position-relative mx-auto" style="width: 150px; height: 150px">
+                  <img id="avatar" :src="MyProfileStore.myProfile?.avatar || defaultAvatar"
+                    class="rounded-circle border w-100 h-100 object-fit-cover" alt="profile" />
+                  <div class="dropdown position-absolute bg-main rounded-circle" style="bottom: 50px; right: -12px">
                     <span
                       class="d-flex justify-content-center align-items-center bg-btn text-white rounded-circle shadow"
-                      data-bs-toggle="dropdown"
-                      style="width: 35px; height: 35px; cursor: pointer"
-                    >
+                      data-bs-toggle="dropdown" style="width: 35px; height: 35px; cursor: pointer">
                       <Pencil size="20" />
                     </span>
 
                     <ul class="dropdown-menu px-2 bg-main border">
                       <li>
-                        <input
-                          id="uploadImage"
-                          type="file"
-                          @change="handleFile"
-                          accept="image/*"
-                          style="display: none"
-                        />
-                        <label
-                          for="uploadImage"
-                          class="btn dropdown-item mb-1 nav-text"
-                        >
+                        <input id="uploadImage" type="file" @change="handleFile" accept="image/*"
+                          style="display: none" />
+                        <label for="uploadImage" class="btn dropdown-item mb-1 nav-text">
                           <Pencil class="me-2" size="21" /> Change Profile
                         </label>
                       </li>
                       <li>
-                        <button
-                          class="btn dropdown-item nav-text"
-                          type="button"
-                          @click="Remove_Modal"
-                        >
+                        <button class="btn dropdown-item nav-text" type="button" @click="Remove_Modal">
                           <Trash2 class="me-2 text-danger" size="21" /> Remove
                           Profile
                         </button>
@@ -91,16 +67,10 @@
           </div>
           <div class="col-lg-6">
             <div class="d-flex justify-content-end mt-10">
-              <button
-                class="btn bg-btn rounded-pill py-2 px-6 me-3"
-                @click="editModal"
-              >
+              <button class="btn bg-btn rounded-pill py-2 px-6 me-3" @click="editModal">
                 Edit Profile
               </button>
-              <button
-                class="btn btn-danger rounded-pill py-2 px-6"
-                @click="toggleModal"
-              >
+              <button class="btn btn-danger rounded-pill py-2 px-6" @click="toggleModal">
                 Sign out
               </button>
             </div>
@@ -155,29 +125,18 @@
           </div>
         </div>
 
-        <BaseModal
-          v-if="showCropper"
-          @closeModal="showCropper = false"
-          position="justify-content-center"
-        >
+        <BaseModal v-if="showCropper" @closeModal="showCropper = false" position="justify-content-center">
           <template #header>
             <h5 class="modal-title mx-auto fw-bold">Crop Profile Picture</h5>
           </template>
 
           <template #body>
             <div class="cropper-container mb-5">
-              <Cropper
-                ref="cropperRef"
-                :src="imageSource"
-                :stencil-props="{
-                  aspectRatio: 1 / 1,
-                  movable: true,
-                  resizable: true,
-                }"
-                :stencil-component="CircleStencil"
-                image-restriction="stencil"
-                class="cropper-instance"
-              />
+              <Cropper ref="cropperRef" :src="imageSource" :stencil-props="{
+                aspectRatio: 1 / 1,
+                movable: true,
+                resizable: true,
+              }" :stencil-component="CircleStencil" image-restriction="stencil" class="cropper-instance" />
             </div>
             <p class="text-center text-muted m-0">
               Scroll to zoom • Drag to move
@@ -185,75 +144,46 @@
           </template>
 
           <template #footer>
-            <button
-              class="btn btn-secondary rounded-pill px-6 py-2"
-              @click="showCropper = false"
-            >
+            <button class="btn btn-secondary rounded-pill px-6 py-2" @click="showCropper = false">
               Cancel
             </button>
-            <button
-              class="btn bg-btn text-white rounded-pill px-6"
-              @click="cropAndUpload"
-              :disabled="Loading"
-            >
-              <span
-                v-if="Loading"
-                class="spinner-border spinner-border-sm me-2"
-              ></span>
+            <button class="btn bg-btn text-white rounded-pill px-6" @click="cropAndUpload" :disabled="Loading">
+              <span v-if="Loading" class="spinner-border spinner-border-sm me-2"></span>
               Confirm Crop
             </button>
           </template>
         </BaseModal>
 
-        <BaseModal
-          v-if="remove"
-          @closeModal="Remove_Modal"
-          position="justify-content-center"
-        >
-          <template #header
-            ><h5 class="modal-title mx-auto fw-bold">
+        <BaseModal v-if="remove" @closeModal="Remove_Modal" position="justify-content-center">
+          <template #header>
+            <h5 class="modal-title mx-auto fw-bold">
               Remove Profile
-            </h5></template
-          >
-          <template #body
-            ><p class="text-center mb-0">
+            </h5>
+          </template>
+          <template #body>
+            <p class="text-center mb-0">
               Are you sure you want to remove your profile image?
-            </p></template
-          >
+            </p>
+          </template>
           <template #footer>
-            <button
-              type="button"
-              class="btn btn-secondary rounded-pill px-6 py-2"
-              @click="Remove_Modal"
-            >
+            <button type="button" class="btn btn-secondary rounded-pill px-6 py-2" @click="Remove_Modal">
               Cancel
             </button>
-            <button
-              class="btn btn-danger rounded-pill px-6 py-2"
-              @click="removeAvatar"
-              :disabled="Loading"
-            >
-              <span
-                v-if="Loading"
-                class="spinner-border spinner-border-sm me-2"
-              ></span>
+            <button class="btn btn-danger rounded-pill px-6 py-2" @click="removeAvatar" :disabled="Loading">
+              <span v-if="Loading" class="spinner-border spinner-border-sm me-2"></span>
               Confirm Remove
             </button>
           </template>
         </BaseModal>
 
         <BaseModal v-if="edit" @closeModal="editModal">
-          <template #header
-            ><h5 class="modal-title mx-auto fw-bold">Edit Profile</h5></template
-          >
+          <template #header>
+            <h5 class="modal-title mx-auto fw-bold">Edit Profile</h5>
+          </template>
           <template #body>
             <div class="mb-3">
               <label class="mb-2">Name</label>
-              <BaseInput
-                inputPlaceholder="Enter your name"
-                inputIcon="User"
-                v-model="editProfile.name"
-              />
+              <BaseInput inputPlaceholder="Enter your name" inputIcon="User" v-model="editProfile.name" />
               <p v-if="err.name" class="text-danger m-0">
                 {{ err.name }}
               </p>
@@ -261,85 +191,51 @@
 
             <div class="mb-3">
               <label class="mb-2">Email</label>
-              <BaseInput
-                inputPlaceholder="Enter your email"
-                inputIcon="Mail"
-                v-model="editProfile.email"
-              />
+              <BaseInput inputPlaceholder="Enter your email" inputIcon="Mail" v-model="editProfile.email" />
               <p v-if="err.email" class="text-danger m-0">
                 {{ err.email }}
               </p>
             </div>
             <div class="mb-3">
               <label class="mb-2">Location</label>
-              <BaseInput
-                inputPlaceholder="Enter your location"
-                inputIcon="MapPin"
-                v-model="editProfile.location"
-              />
+              <BaseInput inputPlaceholder="Enter your location" inputIcon="MapPin" v-model="editProfile.location" />
               <p v-if="err.location" class="text-danger m-0">
                 {{ err.location }}
               </p>
             </div>
             <div class="mb-3">
               <label class="mb-2">Phone</label>
-              <BaseInput
-                inputPlaceholder="Enter your phone"
-                inputIcon="Phone"
-                v-model="editProfile.phone"
-              />
+              <BaseInput inputPlaceholder="Enter your phone" inputIcon="Phone" v-model="editProfile.phone" />
               <p v-if="err.phone" class="text-danger m-0">
                 {{ err.phone }}
               </p>
             </div>
           </template>
           <template #footer>
-            <button
-              type="button"
-              class="btn btn-secondary rounded-pill px-6 py-2"
-              @click="editModal"
-            >
+            <button type="button" class="btn btn-secondary rounded-pill px-6 py-2" @click="editModal">
               Cancel
             </button>
-            <button
-              class="btn bg-btn text-white rounded-pill py-2 px-6"
-              @click="UpdateProfile"
-              :disabled="Loading"
-            >
-              <span
-                v-if="Loading"
-                class="spinner-border spinner-border-sm me-2"
-              ></span>
+            <button class="btn bg-btn text-white rounded-pill py-2 px-6" @click="UpdateProfile" :disabled="Loading">
+              <span v-if="Loading" class="spinner-border spinner-border-sm me-2"></span>
               Update
             </button>
           </template>
         </BaseModal>
 
-        <BaseModal
-          v-if="open"
-          @closeModal="toggleModal"
-          position="justify-content-center"
-        >
-          <template #header
-            ><h5 class="modal-title mx-auto fw-bold">Sign out</h5></template
-          >
-          <template #body
-            ><p class="text-center mb-0">
+        <BaseModal v-if="open" @closeModal="toggleModal" position="justify-content-center">
+          <template #header>
+            <h5 class="modal-title mx-auto fw-bold">Sign out</h5>
+          </template>
+          <template #body>
+            <p class="text-center mb-0">
               Are you sure you want to sign out?
-            </p></template
-          >
+            </p>
+          </template>
           <template #footer>
-            <button
-              type="button"
-              class="btn btn-secondary rounded-pill px-6 py-2"
-              @click="toggleModal"
-            >
+            <button type="button" class="btn btn-secondary rounded-pill px-6 py-2" @click="toggleModal">
               Cancel
             </button>
-            <button
-              class="btn btn-danger rounded-pill py-2 px-6"
-              @click="handleLogout"
-            >
+            <button class="btn btn-danger rounded-pill py-2 px-6" @click="handleLogout">
               Sign out
             </button>
           </template>
@@ -366,6 +262,7 @@ import { Cropper, CircleStencil } from "vue-advanced-cropper";
 import "vue-advanced-cropper/dist/style.css";
 
 import { require, isEmail, validates, isPrice, checkPhone } from "@/utils/validate";
+import defaultAvatar from "@/assets/img/no-image.jpeg";
 
 const router = useRouter();
 const MyProfileStore = useProfileStore();
@@ -389,7 +286,7 @@ onMounted(async () => {
     editProfile.value = { ...MyProfileStore.myProfile };
   }
   if (MyProfileStore.mustEdit) {
-    edit.value = true; 
+    edit.value = true;
     validate();
     MyProfileStore.mustEdit = false;
   }
@@ -487,20 +384,19 @@ async function cropAndUpload() {
   if (!canvas) return;
 
   Loading.value = true;
-  canvas.toBlob(async (blob) => {
-    try {
-      let formData = new FormData();
-      formData.append("image", blob, "avatar.jpg");
-      await api.post("/api/profile/image", formData);
-      toast.success("Profile image updated successfully");
-      await MyProfileStore.fetchMyProfile();
-      showCropper.value = false;
-    } catch (error) {
-      toast.error("Upload failed");
-    } finally {
-      Loading.value = false;
-    }
-  }, "image/jpeg");
+  try {
+    const blob = await new Promise((resolve) => canvas.toBlob(resolve, "image/jpeg"));
+    let formData = new FormData();
+    formData.append("image", blob, "avatar.jpg");
+    await api.post("/api/profile/image", formData);
+    toast.success("Profile image updated successfully");
+    await MyProfileStore.fetchMyProfile();
+    showCropper.value = false;
+  } catch (error) {
+    toast.error("Upload failed");
+  } finally {
+    Loading.value = false;
+  }
 }
 
 async function removeAvatar() {
@@ -586,6 +482,7 @@ ul.timeline {
   list-style-type: none;
   position: relative;
 }
+
 ul.timeline:before {
   content: " ";
   background: #d4d9df;
@@ -596,11 +493,13 @@ ul.timeline:before {
   height: 100%;
   z-index: 400;
 }
-ul.timeline > li {
+
+ul.timeline>li {
   margin: 20px 0;
   padding-left: 30px;
 }
-ul.timeline > li:before {
+
+ul.timeline>li:before {
   content: " ";
   background: white;
   display: inline-block;
@@ -617,6 +516,7 @@ ul.timeline > li:before {
   color: #707070 !important;
   font-size: 14px;
 }
+
 .icon-box-title {
   background: #f0fff4;
   padding: 12px;

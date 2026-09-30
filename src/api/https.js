@@ -1,7 +1,8 @@
 import { useAuthStore } from "@/stores/auth";
 import axios from "axios";
 const api = axios.create({
-  baseURL: "https://ecommerce201.csm.linkpc.net",
+  baseURL:
+    import.meta.env.VITE_API_BASE_URL || "https://ecommerce201.csm.linkpc.net",
 });
 
 api.interceptors.request.use((config) => {

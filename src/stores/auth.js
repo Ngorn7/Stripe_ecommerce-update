@@ -19,10 +19,15 @@ export const useAuthStore = defineStore("auth", () => {
   }
 
   async function logout() {
-    const res = await api.delete("/api/logout");
-    user.value = null;
-    token.value = null;
-    localStorage.removeItem("token");
+    try {
+      await api.delete("/api/logout");
+    } catch (err) {
+      console.log("Logout API failed:", err);
+    } finally {
+      user.value = null;
+      token.value = null;
+      localStorage.removeItem("token");
+    }
   }
 
   async function register(name, email, password, password_confirmation) {

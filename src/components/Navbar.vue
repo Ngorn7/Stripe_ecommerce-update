@@ -5,71 +5,44 @@
         <div>
           <ul class="navbar-nav gap-2">
             <li class="nav-item">
-              <router-link
-                to="/"
-                class="nav-link fs-6 fw-bold text-uppercase text-dark ls"
-                exact-active-class="text-main"
-              >
+              <router-link to="/" class="nav-link fs-6 fw-bold text-uppercase text-dark ls"
+                exact-active-class="text-main">
                 Home
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link
-                to="/shopping"
-                class="nav-link fs-6 fw-bold text-uppercase text-dark ls"
-                exact-active-class="text-main"
-              >
+              <router-link to="/shopping" class="nav-link fs-6 fw-bold text-uppercase text-dark ls"
+                exact-active-class="text-main">
                 Shopping
               </router-link>
             </li>
 
             <li class="nav-item">
-              <router-link
-                to="/dashboard/createProduct"
-                class="nav-link fs-6 fw-bold text-uppercase text-dark ls"
-                exact-active-class="text-main"
-              >
+              <router-link to="/dashboard/createProduct" class="nav-link fs-6 fw-bold text-uppercase text-dark ls"
+                exact-active-class="text-main">
                 Start Selling
               </router-link>
             </li>
           </ul>
         </div>
         <router-link to="/" class="navbar-brand fw-bold">
-          <img
-            src="../assets/img/logo vue.png"
-            class=""
-            alt=""
-            style="width: 150px; object-fit: contain"
-          />
+          <img src="../assets/img/logo vue.png" class="" alt="" style="width: 150px; object-fit: contain" />
         </router-link>
         <div class="d-flex align-items-center gap-3">
-          <OverlayBadge
-            @click="goMyCart"
-            :value="cart.countProduct"
-            severity="danger"
-            class="small-badge"
-          >
+          <OverlayBadge @click="goMyCart" :value="cart.countProduct" severity="danger" class="small-badge">
             <ShoppingBag :size="25" style="cursor: pointer" />
           </OverlayBadge>
 
           <div class="nav-dropdown p-2">
-            <div
-              class="d-flex align-items-center gap-2"
-              style="cursor: pointer"
-            >
+            <div class="d-flex align-items-center gap-2" style="cursor: pointer">
               <template v-if="profile.loading">
                 <div class="skeleton circle"></div>
                 <div class="skeleton text-sm"></div>
               </template>
 
               <template v-else>
-                <img
-                  :src="profile.myProfile?.avatar"
-                  class="rounded-circle"
-                  width="34"
-                  height="34"
-                />
+                <img :src="profile.myProfile?.avatar || defaultAvatar" class="rounded-circle" width="34" height="34" />
                 <p class="m-0 p-0" style="font-size: 14px">
                   {{ profile.myProfile?.name }}
                 </p>
@@ -79,32 +52,20 @@
             <div class="menu-container">
               <Menu :model="profileItems">
                 <template #start>
-                  <div
-                    class="d-flex justify-content-between align-items-center px-3 py-2"
-                  >
+                  <div class="d-flex justify-content-between align-items-center px-3 py-2">
                     <span class="text-secondary small fw-bold">Appearance</span>
                   </div>
                 </template>
                 <template #item="{ item, props }">
-                  <a
-                    v-bind="props.action"
-                    class="d-flex align-items-center gap-3"
-                    :class="{ 'text-danger': item.label === 'Logout' }"
-                  >
-                    <component
-                      :is="item.icon"
-                      :class="{ 'text-danger': item.label === 'Logout' }"
-                    />
+                  <a v-bind="props.action" class="d-flex align-items-center gap-3"
+                    :class="{ 'text-danger': item.label === 'Logout' }">
+                    <component :is="item.icon" :class="{ 'text-danger': item.label === 'Logout' }" />
                     <span>{{ item.label }}</span>
                   </a>
                 </template>
               </Menu>
             </div>
-            <BaseModal
-              v-if="open"
-              @closeModal="toggleModal"
-              position="justify-content-center"
-            >
+            <BaseModal v-if="open" @closeModal="toggleModal" position="justify-content-center">
               <template #header>
                 <h5 class="modal-title mx-auto">Sign out</h5>
               </template>
@@ -114,23 +75,12 @@
                 </p>
               </template>
               <template #footer>
-                <button
-                  type="button"
-                  class="btn btn-secondary rounded-pill py-2 px-6"
-                  @click="toggleModal"
-                >
+                <button type="button" class="btn btn-secondary rounded-pill py-2 px-6" @click="toggleModal">
                   Cancel
                 </button>
-                <button
-                  type="button"
-                  class="btn btn-danger rounded-pill py-2 px-6"
-                  @click="handleLogout"
-                  :disabled="loading"
-                >
-                  <span
-                    v-if="loading"
-                    class="spinner-border spinner-border-sm me-2"
-                  ></span>
+                <button type="button" class="btn btn-danger rounded-pill py-2 px-6" @click="handleLogout"
+                  :disabled="loading">
+                  <span v-if="loading" class="spinner-border spinner-border-sm me-2"></span>
                   Sign out
                 </button>
               </template>
@@ -153,6 +103,7 @@ import { useCartStore } from "@/stores/cart";
 import { useProfileStore } from "@/stores/profile";
 import { useAuthStore } from "@/stores/auth";
 import { ref } from "vue";
+import defaultAvatar from "@/assets/img/no-image.jpeg";
 
 const router = useRouter();
 const goMyCart = () => {
@@ -293,6 +244,7 @@ async function handleLogout() {
   0% {
     background-position: -200% 0;
   }
+
   100% {
     background-position: 200% 0;
   }
