@@ -10,6 +10,12 @@ const router = createRouter({
       component: () => import("../layouts/LayoutNav.vue"),
       children: [
         {
+          path: 'subscription',
+          name: 'subscription',
+          component: () => import('../views/SubscriptionView.vue'),
+          meta: { require: true, title: 'Subscription | Vue Store' },
+        },
+        {
           path: "",
           name: "home",
           component: HomeView,

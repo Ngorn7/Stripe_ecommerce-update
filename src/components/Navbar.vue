@@ -146,6 +146,13 @@ const profileItems = [
   },
 ];
 
+profileItems.push({
+  label: 'Subscription',
+  icon: () => h(ShoppingBag, { size: 22 }),
+  class: 'item-gap',
+  command: () => router.push('/subscription'),
+});
+
 const open = ref(false);
 let loading = ref(false);
 const toggleModal = () => {
