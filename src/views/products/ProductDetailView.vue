@@ -119,6 +119,7 @@
 import DetailSkeleton from "@/components/DetailSkeleton.vue";
 import { useCartStore } from "@/stores/cart";
 import { useProductStore } from "@/stores/product";
+import { useAuthStore } from "@/stores/auth";
 import { onMounted, ref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -126,6 +127,7 @@ const route = useRoute();
 const router = useRouter();
 const id = Number(route.params.id);
 let product = useProductStore();
+const auth = useAuthStore();
 
 const cart = useCartStore();
 let qty = ref(1);
@@ -135,10 +137,18 @@ onMounted(() => {
 });
 
 const handleCart = () => {
+  if (!auth.isLoggedIn) {
+    router.push("/login");
+    return;
+  }
   cart.addToMyCart(id, qty.value);
 };
 
 const handleBuyNow = () => {
+  if (!auth.isLoggedIn) {
+    router.push("/login");
+    return;
+  }
   cart.addToMyCart(id, qty.value);
   router.push("/myCart");
 };

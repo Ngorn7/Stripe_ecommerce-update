@@ -19,7 +19,7 @@ const router = createRouter({
           path: "",
           name: "home",
           component: HomeView,
-          meta: { require: true, title: "Home | Vue Store" },
+          meta: { title: "Home | Vue Store" },
         },
         {
           path: "shopping",
@@ -135,6 +135,9 @@ router.beforeEach((to, from) => {
   let auth = useAuthStore();
   if (!auth.isLoggedIn && to.meta.require) {
     return { name: "login" };
+  }
+  if (auth.isLoggedIn && (to.name === "login" || to.name === "register")) {
+    return { name: "home" };
   }
   return true;
 });

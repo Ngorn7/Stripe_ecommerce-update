@@ -34,7 +34,7 @@
             <ShoppingBag :size="25" style="cursor: pointer" />
           </OverlayBadge>
 
-          <div class="nav-dropdown p-2">
+          <div v-if="auth.isLoggedIn" class="nav-dropdown p-2">
             <div class="d-flex align-items-center gap-2" style="cursor: pointer">
               <template v-if="profile.loading">
                 <div class="skeleton circle"></div>
@@ -86,6 +86,11 @@
               </template>
             </BaseModal>
           </div>
+          <template v-else>
+            <router-link to="/login" class="btn btn-outline-success rounded-pill px-4 py-1 fw-bold text-decoration-none">
+              Sign In
+            </router-link>
+          </template>
         </div>
       </div>
     </nav>
@@ -107,6 +112,10 @@ import defaultAvatar from "@/assets/img/no-image.jpeg";
 
 const router = useRouter();
 const goMyCart = () => {
+  if (!auth.isLoggedIn) {
+    router.push("/login");
+    return;
+  }
   router.push("/myCart");
 };
 
@@ -115,8 +124,12 @@ const profile = useProfileStore();
 const auth = useAuthStore();
 
 onMounted(() => {
-  cart.fetchMyCart();
-  profile.fetchMyProfile();
+  if (auth.isLoggedIn) {
+    cart.fetchMyCart();
+    profile.fetchMyProfile();
+  
+  }
+
 });
 
 const profileItems = [

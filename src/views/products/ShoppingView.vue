@@ -4,12 +4,14 @@ import BaseInput from "@/components/BaseInput.vue";
 import CardSkeleton from "@/components/CardSkeleton.vue";
 import { useCartStore } from "@/stores/cart";
 import { useProductStore } from "@/stores/product";
+import { useAuthStore } from "@/stores/auth";
 import { watch } from "vue";
 import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
 
 const product = useProductStore();
 const cart = useCartStore();
+const auth = useAuthStore();
 const router = useRouter();
 const search = ref("");
 
@@ -22,10 +24,18 @@ watch(search, (newValue) => {
 });
 
 const handleCart = (id) => {
+  if (!auth.isLoggedIn) {
+    router.push("/login");
+    return;
+  }
   cart.addToMyCart(id, cart.countQty);
 };
 
 const handleBuyNow = (id) => {
+  if (!auth.isLoggedIn) {
+    router.push("/login");
+    return;
+  }
   cart.addToMyCart(id, cart.countQty);
   router.push("/myCart");
 };
